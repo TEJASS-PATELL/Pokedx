@@ -64,7 +64,7 @@ function Pokemon() {
         <>
             <section className='container'>
                 <header>
-                    <img className='pokeball' src='./public/lock.png'></img>
+                    <img className='pokeball' src='./lock.png'></img>
                     <h1>Pokedx</h1>
                 </header>
                 <div className='pokemon-search'>
