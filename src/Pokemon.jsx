@@ -72,7 +72,7 @@ function Pokemon() {
                 </div>
                 <div>
                     <ul className='pokemon-cards'>
-                        {/* {pokemon.map((currpokemon) => { */}
+                        {/* {pokemon.map((currpokemon) => {  / only static not for searching */}
                         {SearchPokemon.map((currpokemon) => {
                             return (
                                 <PokemonCard key={currpokemon.id} data={currpokemon}></PokemonCard>
