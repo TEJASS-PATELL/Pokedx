@@ -1,6 +1,6 @@
 :root {
   --primary-color: #ff0000;
-  --secondary-color: #f3fff0;
+  --secondary-color: #ffffff;
   --dark-color: #1d3557;
   --light-color: #a8dadc;
   --font-color: #212529;
@@ -26,6 +26,7 @@ body {
 
 body::-webkit-scrollbar {
   width: 12px;
+  scroll-behavior: smooth;
 }
 
 body::-webkit-scrollbar-track {
@@ -73,7 +74,7 @@ header h1 {
 
 .pokemon-search input {
   width: 100%;
-    font-family: 'Comic Relief';
+  font-family: 'Comic Relief';
   padding: 1rem;
   border: 2px solid rgb(0, 0, 0);
   border-radius: var(--border-radius);
@@ -96,7 +97,7 @@ header h1 {
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
-  border: 2px solid rgb(185, 185, 185);
+  border: 1px solid rgb(227, 221, 221);
   overflow: hidden;
 }
 
