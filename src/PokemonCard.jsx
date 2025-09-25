@@ -43,7 +43,7 @@ export function PokemonCard({ data }) {
           ></img>
         </figure>
         <h1 className="pokemon-name">{data.name.toUpperCase()}</h1>
-        <div className="pokemon-info pokemon-highlight" style={highlightStyle}>
+        <div className="pokemon-highlight" style={highlightStyle}>
           <p>{data.types.map((currelm) => currelm.type.name).join(",  ")}</p>
         </div>
         <div className="grid-three-cols">
