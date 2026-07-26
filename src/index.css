@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-  max-width: 1600px;
+  max-width: 1700px;
   margin: 0 auto;
   padding: 2rem 1.5rem 5rem;
 }
@@ -42,7 +42,7 @@ header h1 {
 /* ── Search ── */
 .pokemon-search input {
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   padding: 0.6rem 1.2rem;
   border-radius: 30px;
   border: 2px solid #ddd;
@@ -113,7 +113,7 @@ header h1 {
 .pokemon-card {
   background: #fff;
   border-radius: 16px;
-  padding: 1.2rem 1rem 1rem;
+  padding: 1.2rem 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -199,7 +199,7 @@ header h1 {
 .type-tag {
   padding: 0.18rem 0.65rem;
   border-radius: 20px;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: capitalize;
   color: #fff;
@@ -217,7 +217,7 @@ header h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 0.65rem;
+  font-size: 0.80rem;
   color: #999;
   text-transform: capitalize;
   gap: 0.1rem;
@@ -226,7 +226,7 @@ header h1 {
 .pokemon-info-p span {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #0c0c0c;
 }
 
 /* ── Info boxes (HP / Attack / Ability) ── */
@@ -241,14 +241,14 @@ header h1 {
 }
 
 .pokemon-info span {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   color: #999;
   text-align: center;
   text-transform: capitalize;
 }
 
 .pokemon-info p {
-  font-size: 0.84rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: #1a1a1a;
   text-align: center;
@@ -264,7 +264,7 @@ header h1 {
 }
 
 .stat-label {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   color: #aaa;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -286,7 +286,7 @@ header h1 {
 }
 
 .stat-value {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
   color: #555;
   min-width: 26px;
@@ -331,7 +331,7 @@ header h1 {
   border: 2px solid #e0e0e0;
   color: #1a1a1a;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 700;
   padding: 0.45rem 1.2rem;
   border-radius: 20px;
