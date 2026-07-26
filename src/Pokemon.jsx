@@ -1,88 +1,137 @@
-import React from 'react'
-import { useState } from 'react';
-import { useEffect } from 'react';
-import './index.css'
-import { PokemonCard } from './PokemonCard';
-function Pokemon() {
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { PokemonCard } from "./PokemonCard";
+import "./index.css";
 
-    const [pokemon, setpokemon] = useState([]);
-    const [loading, setloading] = useState(true);
-    const [error, seterror] = useState(null)
-    const [searchpkm, setsearchpkm] = useState("");
+const API = "https://pokeapi.co/api/v2/pokemon?limit=400&offset=0";
 
-    const API = "https://pokeapi.co/api/v2/pokemon?limit=100";
+const ALL_TYPES = [
+  "all", "fire", "water", "grass", "electric", "psychic", "normal",
+  "ground", "rock", "bug", "ghost", "poison", "fairy", "fighting",
+  "dragon", "ice", "dark", "steel", "flying",
+];
 
-    const fetchpokemon = async () => {
-        try {
-            const fetchAPI = await fetch(API);
-            const data = await fetchAPI.json();
-            console.log(data);
+const PAGE_SIZE = 40;
 
-            const deatiledData = data.results.map(async (currpokemon) => {
-                const res = await fetch(currpokemon.url);
-                const data = await res.json();
-                return data;
-            })
+export default function Pokemon() {
+  const [pokemon, setPokemon]         = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [error, setError]             = useState(null);
+  const [search, setSearch]           = useState("");
+  const [activeType, setActiveType]   = useState("all");
+  const [page, setPage]               = useState(1);
 
-            console.log(deatiledData);
+  const fetchPokemon = useCallback(async () => {
+    try {
+      const res  = await fetch(API);
+      const data = await res.json();
 
-            const detailresp = await Promise.all(deatiledData);
+      const detailed = await Promise.all(
+        data.results.map((p) => fetch(p.url).then((r) => r.json()))
+      );
 
-            console.log(detailresp);
-            setpokemon(detailresp);
-            setloading(false);
-        } catch (error) {
-            console.log(error);
-            seterror(error);
-            setloading(false);
-        }
+      setPokemon(detailed);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
     }
-    useEffect(() => {
-        fetchpokemon();
-    }, [])
+  }, []);
 
-    if (loading) {
-        return (
-            <div className="loading-container">
-                <div className="spinner"></div>
-                <h2>Loading, please wait...</h2>
-            </div>
-        );
-    }
+  useEffect(() => { fetchPokemon(); }, [fetchPokemon]);
 
-    if (error) {
-        return (
-            <>
-                <h1>Error : {error.message}</h1>
-            </>
-        )
-    }
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase();
+    return pokemon.filter((p) => {
+      const matchName = p.name.toLowerCase().includes(q);
+      const matchType =
+        activeType === "all" ||
+        p.types.some((t) => t.type.name === activeType);
+      return matchName && matchType;
+    });
+  }, [pokemon, search, activeType]);
 
-    const SearchPokemon = pokemon.filter((currpokem) => currpokem.name.toLowerCase().includes(searchpkm.toLowerCase()));
+  const totalPages  = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated   = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-    return (
-        <>
-            <section className='container'>
-                <header>
-                    <img className='pokeball' src='./lock.png'></img>
-                    <h1>Pokedx</h1>
-                </header>
-                <div className='pokemon-search'>
-                    <input type="text" value={searchpkm} onChange={(e) => setsearchpkm(e.target.value)} placeholder='Search Pokemon'></input>
-                </div>
-                <div>
-                    <ul className='pokemon-cards'>
-                        {/* {pokemon.map((currpokemon) => {  / only static not for searching */}
-                        {SearchPokemon.map((currpokemon) => {
-                            return (
-                                <PokemonCard key={currpokemon.id} data={currpokemon}></PokemonCard>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </section>
-        </>
-    )
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
+
+  const handleType = (type) => {
+    setActiveType(type);
+    setPage(1);
+  };
+
+  if (loading) return (
+    <div className="loading-container">
+      <div className="spinner" />
+      <h2>Loading Pokédex…</h2>
+    </div>
+  );
+
+  if (error) return (
+    <div className="loading-container">
+      <h2>Error: {error.message}</h2>
+    </div>
+  );
+
+  return (
+    <section className="container">
+      <header>
+        <img className="pokeball" src="./lock.png" alt="pokeball" />
+        <h1>Pokédex</h1>
+      </header>
+
+      <div className="pokemon-search">
+        <input
+          type="text"
+          value={search}
+          onChange={handleSearch}
+          placeholder="Search Pokémon…"
+          aria-label="Search Pokémon"
+        />
+      </div>
+
+      <div className="type-filters">
+        {ALL_TYPES.map((type) => (
+          <button
+            key={type}
+            className={`type-btn type-btn--${type} ${activeType === type ? "active" : ""}`}
+            onClick={() => handleType(type)}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
+      <p className="results-count">{filtered.length} Pokémon found</p>
+
+      <ul className="pokemon-cards">
+        {paginated.map((p) => (
+          <PokemonCard key={p.id} data={p} />
+        ))}
+      </ul>
+
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            className="page-btn"
+            onClick={() => setPage((v) => Math.max(1, v - 1))}
+            disabled={page === 1}
+          >
+            ←
+          </button>
+          <span className="page-info">{page} / {totalPages}</span>
+          <button
+            className="page-btn"
+            onClick={() => setPage((v) => Math.min(totalPages, v + 1))}
+            disabled={page === totalPages}
+          >
+            →
+          </button>
+        </div>
+      )}
+    </section>
+  );
 }
-
-export default Pokemon;
